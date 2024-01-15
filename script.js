@@ -1,3 +1,16 @@
+const winConditions = function(arr, t) {
+    // t for player token
+    if (arr[0][0] === t && arr[0][1] === t && arr[0][2] === t) { return true }
+    else if (arr[1][0] === t && arr[1][1] === t && arr[1][2] === t) { return true }
+    else if (arr[2][0] === t && arr[2][1] === t && arr[2][2] === t) { return true }
+    else if (arr[0][0] === t && arr[1][0] === t && arr[2][0] === t) { return true}
+    else if (arr[0][1] === t && arr[1][1] === t && arr[2][1] === t) { return true }
+    else if (arr[0][2] === t && arr[1][2] === t && arr[2][2] === t) { return true }
+    else if (arr[0][0] === t && arr[1][1] === t && arr[2][2] === t) { return true }
+    else if (arr[1][2] === t && arr[1][1] === t && arr[2][0] === t) { return true }
+    else { return false };
+}
+
 let board = (function() {
 
     // Private properties
@@ -33,9 +46,10 @@ let board = (function() {
 })();
 
 
-function makePlayer(playerToken) {
-    const playerName = `${playerToken} Player`;
-    const playerToken = playerToken;
+// Factory function to make players
+function makePlayer(token) {
+    const playerName = `${token} Player`;
+    const playerToken = token;
     let isActive = false;
     let numberOfWins = 0;  // Used if multiple rounds are played.
 
@@ -48,6 +62,10 @@ let runGame = (function() {
     let playerX = makePlayer("X");
     let playerO = makePlayer("O");
     playerX.isActive = true;
+
+    function getActivePlayer(player1, player2) {
+        return player1.isActive ? player1 : player2;
+    }
 
     function switchPlayer(player1, player2) {
         if (player1.isActive === true) {
@@ -68,14 +86,14 @@ let runGame = (function() {
             gameOver = true;
         }
         
+        let activePlayer = getActivePlayer(playerX, playerO);
         console.clear();
         board.showBoard();
 
         // Temporary user interface:
         let x = prompt("x coordinate:");
         let y = prompt("y coordinate:");
-        let player = prompt("Your piece:");
-        board.setPosition(x, y, player);
+        board.setPosition(x, y, activePlayer.playerToken);
         switchPlayer(playerX, playerO);
     }
 
