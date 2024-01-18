@@ -1,13 +1,13 @@
-const winConditions = function(arr, t) {
+function winConditions(arr, t) {
     // t for player token
-    if (arr[0][0] === t && arr[0][1] === t && arr[0][2] === t) { return true }
-    else if (arr[1][0] === t && arr[1][1] === t && arr[1][2] === t) { return true }
-    else if (arr[2][0] === t && arr[2][1] === t && arr[2][2] === t) { return true }
-    else if (arr[0][0] === t && arr[1][0] === t && arr[2][0] === t) { return true}
-    else if (arr[0][1] === t && arr[1][1] === t && arr[2][1] === t) { return true }
-    else if (arr[0][2] === t && arr[1][2] === t && arr[2][2] === t) { return true }
-    else if (arr[0][0] === t && arr[1][1] === t && arr[2][2] === t) { return true }
-    else if (arr[1][2] === t && arr[1][1] === t && arr[2][0] === t) { return true }
+    if (arr[0][0] === t && arr[0][1] === t && arr[0][2] === t) { return true } // top row
+    else if (arr[1][0] === t && arr[1][1] === t && arr[1][2] === t) { return true } // mid row
+    else if (arr[2][0] === t && arr[2][1] === t && arr[2][2] === t) { return true } // bottom row
+    else if (arr[0][0] === t && arr[1][0] === t && arr[2][0] === t) { return true} // left column
+    else if (arr[0][1] === t && arr[1][1] === t && arr[2][1] === t) { return true } // mid column
+    else if (arr[0][2] === t && arr[1][2] === t && arr[2][2] === t) { return true } // right column
+    else if (arr[0][0] === t && arr[1][1] === t && arr[2][2] === t) { return true } // top-left to bottom-right
+    else if (arr[0][2] === t && arr[1][1] === t && arr[2][0] === t) { return true } // top-irght to bottom-left
     else { return false };
 }
 
@@ -27,22 +27,33 @@ let board = (function() {
     }
 
     // Public properties
-    let isEmpty = boardArray.some(row => row.some(space => space === empty));
+
+    // Check if the board is full (returns boolean)
+
 
     // Public methods
+    const isFull = () => {
+        return boardArray.every(row => row.every(space => space !== empty));
+    };
+
+
     const showBoard = () => {
         console.table(boardArray);
     };
+
 
     const setPosition = (x, y, token) => {
         if (boardArray[x][y] === empty) {
             return boardArray[x][y] = token;
         }
         console.log("You cannot overwrite that position.");
+        // while (boardArray[x][y] === empty) {
+        //     return boardArray[x][y] = token;
+        // }
     }; 
 
     // Return object
-    return { isEmpty, showBoard, setPosition };
+    return { isFull, showBoard, setPosition, boardArray };  // TEMP: return boardArray for debuggin purposes
 })();
 
 
@@ -59,6 +70,7 @@ function makePlayer(token) {
 
 let runGame = (function() {
 
+    // Private variables and methods
     let playerX = makePlayer("X");
     let playerO = makePlayer("O");
     playerX.isActive = true;
@@ -81,9 +93,16 @@ let runGame = (function() {
 
     let gameOver = false;
 
+    // Running the game until a game over condition is met
     while (!gameOver) {
-        if (!board.isEmpty) {
+        let isXWinner = winConditions(board.boardArray, playerX.playerToken);
+        let isOWinner = winConditions(board.boardArray, playerO.playerToken);
+
+        if (board.isFull() || isXWinner || isOWinner) {
             gameOver = true;
+            console.log("Game over!");
+            board.showBoard();
+            break
         }
         
         let activePlayer = getActivePlayer(playerX, playerO);
@@ -91,9 +110,10 @@ let runGame = (function() {
         board.showBoard();
 
         // Temporary user interface:
-        let x = prompt("x coordinate:");
-        let y = prompt("y coordinate:");
+        let x = prompt(`${activePlayer.playerToken}'s turn! x coordinate:`);
+        let y = prompt(`${activePlayer.playerToken}'s turn! y coordinate:`);
         board.setPosition(x, y, activePlayer.playerToken);
+        
         switchPlayer(playerX, playerO);
     }
 
