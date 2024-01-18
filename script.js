@@ -19,6 +19,7 @@ let board = (function() {
     const columns = 3;
     let boardArray = [];
 
+    // Generate boardArray content
     for (let i = 0; i < rows; i++) {
         boardArray[i] = [];
         for (let j = 0; j < columns; j++) {
@@ -26,12 +27,10 @@ let board = (function() {
         }
     }
 
-    // Public properties
-
-    // Check if the board is full (returns boolean)
-
 
     // Public methods
+
+    // Check if the board is full (returns boolean)
     const isFull = () => {
         return boardArray.every(row => row.every(space => space !== empty));
     };
@@ -53,7 +52,7 @@ let board = (function() {
     }; 
 
     // Return object
-    return { isFull, showBoard, setPosition, boardArray };  // TEMP: return boardArray for debuggin purposes
+    return { isFull, showBoard, setPosition };
 })();
 
 
