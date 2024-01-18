@@ -46,13 +46,10 @@ let board = (function() {
             return boardArray[x][y] = token;
         }
         console.log("You cannot overwrite that position.");
-        // while (boardArray[x][y] === empty) {
-        //     return boardArray[x][y] = token;
-        // }
     }; 
 
     // Return object
-    return { isFull, showBoard, setPosition };
+    return { isFull, showBoard, setPosition, boardArray };
 })();
 
 
@@ -97,10 +94,20 @@ let runGame = (function() {
         let isXWinner = winConditions(board.boardArray, playerX.playerToken);
         let isOWinner = winConditions(board.boardArray, playerO.playerToken);
 
-        if (board.isFull() || isXWinner || isOWinner) {
+        if (board.isFull()) {
             gameOver = true;
-            console.log("Game over!");
+            console.log("Cat's game. It's a tie!");
             board.showBoard();
+            break
+        }
+        else if (isXWinner) {
+            board.showBoard()
+            console.log("X wins!");
+            break
+        }
+        else if (isOWinner) {
+            board.showBoard();
+            console.log("Y wins!");
             break
         }
         
