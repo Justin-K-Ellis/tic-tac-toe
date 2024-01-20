@@ -1,0 +1,26 @@
+* {
+    font-size: 16px;
+}
+
+.container {
+    width: 300px;
+    height: 300px;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+}
+
+.row {
+    /* border: 1px solid black; */
+    display: flex;
+    flex-direction: row;
+    flex-basis: 100px;
+}
+
+.cell {
+    border: 1px solid black;
+    flex-grow: 1;
+    text-align: center;
+    padding-top: 42px;
+    padding-bottom: 42px;
+}
