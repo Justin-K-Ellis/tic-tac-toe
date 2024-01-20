@@ -59,41 +59,6 @@ function makePlayer(token) {
 }
 
 
-// Render array to screen and allow user interaction
-let renderToDOM = (function() {
-    // Squares
-    let topLeft = document.querySelector("#top-left");
-    let topMid = document.querySelector("#top-mid");
-    let topRight = document.querySelector("#top-right");
-    let centerLeft = document.querySelector("#center-left");
-    let centerMid = document.querySelector("#center-mid");
-    let centerRight = document.querySelector("#center-right");
-    let bottomLeft = document.querySelector("#bottom-left");
-    let bottomMid = document.querySelector("#bottom-mid");
-    let bottomRight = document.querySelector("#bottom-right");
-
-    // When a cell in the DOM is clicked, assign a token to the 
-    // corresponding position in the array, and display the token in 
-    // the UI by giving the content of the array element to the DOM cell.
-    function makeCellDrawer(cell, arrayPosition) {
-        const currentCell = cell;
-        const currentPosition = arrayPosition;
-        return function(token) {
-            currentCell.addEventListener("click", () => {
-                currentPosition = token;
-                currentCell.textContent = currentPosition;
-            })
-        } 
-    }
-
-    // TODO: Not loading
-    // Need a way to pass the array position to the function
-    const drawtoTL = makeCellDrawer(topLeft, board.boardArray[0][0]);
-
-    return { drawtoTL };
-})();
-
-
 let runGame = (function() {
 
     // Private variables and methods
@@ -136,21 +101,18 @@ let runGame = (function() {
         }
         else if (isOWinner) {
             board.showBoard();
-            console.log("Y wins!");
+            console.log("O wins!");
             break
         }
         
         let activePlayer = getActivePlayer(playerX, playerO);
         console.clear();
         board.showBoard();
-        // renderToDOM.renderBoard();
 
         // Temporary user interface:
-        // let x = prompt(`${activePlayer.playerToken}'s turn! x coordinate:`);
-        // let y = prompt(`${activePlayer.playerToken}'s turn! y coordinate:`);
-        // board.setPosition(x, y, activePlayer.playerToken);
-
-        renderToDOM.drawtoTL(activePlayer.playerToken);
+        let x = prompt(`${activePlayer.playerToken}'s turn! x coordinate:`);
+        let y = prompt(`${activePlayer.playerToken}'s turn! y coordinate:`);
+        board.setPosition(x, y, activePlayer.playerToken);
 
         switchPlayer(playerX, playerO);
     }
