@@ -11,14 +11,13 @@ function winConditions(arr, t) {
     else { return false };
 }
 
-let board = (function() {
 
+let board = (function() {
     // Private properties
     const empty = "_";
     const rows = 3;
     const columns = 3;
     let boardArray = [];
-
     // Generate boardArray content
     for (let i = 0; i < rows; i++) {
         boardArray[i] = [];
@@ -27,15 +26,11 @@ let board = (function() {
         }
     }
 
-
     // Public methods
-
     // Check if the board is full (returns boolean)
     const isFull = () => {
         return boardArray.every(row => row.every(space => space !== empty));
     };
-
-
     const showBoard = () => {
         console.table(boardArray);
     };
@@ -64,6 +59,41 @@ function makePlayer(token) {
 }
 
 
+// Render array to screen and allow user interaction
+let renderToDOM = (function() {
+    // Squares
+    let topLeft = document.querySelector("#top-left");
+    let topMid = document.querySelector("#top-mid");
+    let topRight = document.querySelector("#top-right");
+    let centerLeft = document.querySelector("#center-left");
+    let centerMid = document.querySelector("#center-mid");
+    let centerRight = document.querySelector("#center-right");
+    let bottomLeft = document.querySelector("#bottom-left");
+    let bottomMid = document.querySelector("#bottom-mid");
+    let bottomRight = document.querySelector("#bottom-right");
+
+    // When a cell in the DOM is clicked, assign a token to the 
+    // corresponding position in the array, and display the token in 
+    // the UI by giving the content of the array element to the DOM cell.
+    function makeCellDrawer(cell, arrayPosition) {
+        const currentCell = cell;
+        const currentPosition = arrayPosition;
+        return function(token) {
+            currentCell.addEventListener("click", () => {
+                currentPosition = token;
+                currentCell.textContent = currentPosition;
+            })
+        } 
+    }
+
+    // TODO: Not loading
+    // Need a way to pass the array position to the function
+    const drawtoTL = makeCellDrawer(topLeft, board.boardArray[0][0]);
+
+    return { drawtoTL };
+})();
+
+
 let runGame = (function() {
 
     // Private variables and methods
@@ -87,9 +117,8 @@ let runGame = (function() {
 
     }
 
-    let gameOver = false;
-
     // Running the game until a game over condition is met
+    let gameOver = false;
     while (!gameOver) {
         let isXWinner = winConditions(board.boardArray, playerX.playerToken);
         let isOWinner = winConditions(board.boardArray, playerO.playerToken);
@@ -114,12 +143,15 @@ let runGame = (function() {
         let activePlayer = getActivePlayer(playerX, playerO);
         console.clear();
         board.showBoard();
+        // renderToDOM.renderBoard();
 
         // Temporary user interface:
-        let x = prompt(`${activePlayer.playerToken}'s turn! x coordinate:`);
-        let y = prompt(`${activePlayer.playerToken}'s turn! y coordinate:`);
-        board.setPosition(x, y, activePlayer.playerToken);
-        
+        // let x = prompt(`${activePlayer.playerToken}'s turn! x coordinate:`);
+        // let y = prompt(`${activePlayer.playerToken}'s turn! y coordinate:`);
+        // board.setPosition(x, y, activePlayer.playerToken);
+
+        renderToDOM.drawtoTL(activePlayer.playerToken);
+
         switchPlayer(playerX, playerO);
     }
 
