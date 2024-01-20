@@ -75,22 +75,21 @@ let renderToDOM = (function() {
     // When a cell in the DOM is clicked, assign a token to the 
     // corresponding position in the array, and display the token in 
     // the UI by giving the content of the array element to the DOM cell.
-    function makeCellDrawer(cell, arrayPosition) {
-        const currentCell = cell;
-        const currentPosition = arrayPosition;
+    function makeCellDrawer(cell, x, y) {  // X-axis position, not player X
         return function(token) {
-            currentCell.addEventListener("click", () => {
-                currentPosition = token;
-                currentCell.textContent = currentPosition;
+            cell.addEventListener("click", () => {
+                board.setPosition(x, y, token);
+                cell.textContent = board.boardArray[x][y];
             })
         } 
     }
 
     // TODO: Not loading
     // Need a way to pass the array position to the function
-    const drawtoTL = makeCellDrawer(topLeft, board.boardArray[0][0]);
+    // const drawtoTL = makeCellDrawer(topLeft, 0, 0);
 
-    return { drawtoTL };
+    // return { drawtoTL };
+    makeCellDrawer(topLeft, 0, 0);
 })();
 
 
