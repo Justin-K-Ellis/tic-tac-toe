@@ -86,10 +86,9 @@ let renderToDOM = (function() {
 
     // TODO: Not loading
     // Need a way to pass the array position to the function
-    // const drawtoTL = makeCellDrawer(topLeft, 0, 0);
+    const drawtoTL = makeCellDrawer(topLeft, 0, 0);
 
-    // return { drawtoTL };
-    makeCellDrawer(topLeft, 0, 0);
+    return { drawtoTL };
 })();
 
 
@@ -142,12 +141,6 @@ let runGame = (function() {
         let activePlayer = getActivePlayer(playerX, playerO);
         console.clear();
         board.showBoard();
-        // renderToDOM.renderBoard();
-
-        // Temporary user interface:
-        // let x = prompt(`${activePlayer.playerToken}'s turn! x coordinate:`);
-        // let y = prompt(`${activePlayer.playerToken}'s turn! y coordinate:`);
-        // board.setPosition(x, y, activePlayer.playerToken);
 
         renderToDOM.drawtoTL(activePlayer.playerToken);
 
