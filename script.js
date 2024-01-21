@@ -18,6 +18,7 @@ let board = (function() {
     const rows = 3;
     const columns = 3;
     let boardArray = [];
+    
     // Generate boardArray content
     for (let i = 0; i < rows; i++) {
         boardArray[i] = [];
@@ -72,26 +73,13 @@ let renderToDOM = (function() {
     let bottomMid = document.querySelector("#bottom-mid");
     let bottomRight = document.querySelector("#bottom-right");
 
-    // When a cell in the DOM is clicked, assign a token to the 
-    // corresponding position in the array, and display the token in 
-    // the UI by giving the content of the array element to the DOM cell.
-    function makeCellDrawer(cell, x, y) {  // X-axis position, not player X
-        return function(token) {
-            cell.addEventListener("click", () => {
-                board.setPosition(x, y, token);
-                cell.textContent = board.boardArray[x][y];
-            })
-        } 
-    }
-
-    // TODO: Not loading
-    // Need a way to pass the array position to the function
-    // const drawtoTL = makeCellDrawer(topLeft, 0, 0);
+    let message = document.querySelector("#message");
 
     return {
         topLeft, topMid, topRight,
         centerLeft, centerMid, centerRight,
         bottomLeft, bottomMid, bottomRight,
+        message,
     }
 })();
 
@@ -101,6 +89,9 @@ let runGame = (function() {
     // Private variables and methods
     let playerX = makePlayer("X");
     let playerO = makePlayer("O");
+    let isXWinner = winConditions(board.boardArray, playerX.playerToken);
+    let isOWinner = winConditions(board.boardArray, playerO.playerToken);
+
     playerX.isActive = true;
 
     function getActivePlayer(player1, player2) {
@@ -116,7 +107,6 @@ let runGame = (function() {
             player2.isActive = false;
             player1.isActive = true;
         }
-
     }
 
     function handleClick(cell, x, y) {
@@ -124,6 +114,16 @@ let runGame = (function() {
         board.setPosition(x, y, activePlayer.playerToken);
         cell.textContent = activePlayer.playerToken;
         switchPlayer(playerX, playerO);
+
+        if (board.isFull()) {
+            renderToDOM.message.textContent = "Cat's game! It's a tie!";
+        }
+        else if (isXWinner) {
+            renderToDOM.message.textContent = "X wins!";
+        }
+        else if (isOWinner) {
+            renderToDOM.message.textContent = "O wins!";
+        }
     }
 
     // Attach event listeners to DOM objects
@@ -155,38 +155,7 @@ let runGame = (function() {
         handleClick(renderToDOM.bottomRight, 2, 1);
     })
 
-
-    // Running the game until a game over condition is met
-    // let gameOver = false;
-    // while (!gameOver) {
-    //     let isXWinner = winConditions(board.boardArray, playerX.playerToken);
-    //     let isOWinner = winConditions(board.boardArray, playerO.playerToken);
-
-    //     if (board.isFull()) {
-    //         gameOver = true;
-    //         console.log("Cat's game. It's a tie!");
-    //         board.showBoard();
-    //         break
-    //     }
-    //     else if (isXWinner) {
-    //         board.showBoard()
-    //         console.log("X wins!");
-    //         break
-    //     }
-    //     else if (isOWinner) {
-    //         board.showBoard();
-    //         console.log("Y wins!");
-    //         break
-    //     }
-        
-    //     let activePlayer = getActivePlayer(playerX, playerO);
-    //     console.clear();
-    //     board.showBoard();
-
-    //     renderToDOM.drawtoTL(activePlayer.playerToken);
-
-    //     switchPlayer(playerX, playerO);
-    // }
+    return { isXWinner, isOWinner }
 
 })();
 
