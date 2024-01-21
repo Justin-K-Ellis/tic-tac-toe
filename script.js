@@ -7,7 +7,7 @@ function winConditions(arr, t) {
     else if (arr[0][1] === t && arr[1][1] === t && arr[2][1] === t) { return true } // mid column
     else if (arr[0][2] === t && arr[1][2] === t && arr[2][2] === t) { return true } // right column
     else if (arr[0][0] === t && arr[1][1] === t && arr[2][2] === t) { return true } // top-left to bottom-right
-    else if (arr[0][2] === t && arr[1][1] === t && arr[2][0] === t) { return true } // top-irght to bottom-left
+    else if (arr[0][2] === t && arr[1][1] === t && arr[2][0] === t) { return true } // top-right to bottom-left
     else { return false };
 }
 
@@ -86,9 +86,13 @@ let renderToDOM = (function() {
 
     // TODO: Not loading
     // Need a way to pass the array position to the function
-    const drawtoTL = makeCellDrawer(topLeft, 0, 0);
+    // const drawtoTL = makeCellDrawer(topLeft, 0, 0);
 
-    return { drawtoTL };
+    return {
+        topLeft, topMid, topRight,
+        centerLeft, centerMid, centerRight,
+        bottomLeft, bottomMid, bottomRight,
+    }
 })();
 
 
@@ -115,37 +119,74 @@ let runGame = (function() {
 
     }
 
-    // Running the game until a game over condition is met
-    let gameOver = false;
-    while (!gameOver) {
-        let isXWinner = winConditions(board.boardArray, playerX.playerToken);
-        let isOWinner = winConditions(board.boardArray, playerO.playerToken);
-
-        if (board.isFull()) {
-            gameOver = true;
-            console.log("Cat's game. It's a tie!");
-            board.showBoard();
-            break
-        }
-        else if (isXWinner) {
-            board.showBoard()
-            console.log("X wins!");
-            break
-        }
-        else if (isOWinner) {
-            board.showBoard();
-            console.log("Y wins!");
-            break
-        }
-        
-        let activePlayer = getActivePlayer(playerX, playerO);
-        console.clear();
-        board.showBoard();
-
-        renderToDOM.drawtoTL(activePlayer.playerToken);
-
+    function handleClick(cell, x, y) {
+        const activePlayer = getActivePlayer(playerX, playerO);
+        board.setPosition(x, y, activePlayer.playerToken);
+        cell.textContent = activePlayer.playerToken;
         switchPlayer(playerX, playerO);
     }
+
+    // Attach event listeners to DOM objects
+    renderToDOM.topLeft.addEventListener("click", () => {
+        handleClick(renderToDOM.topLeft, 0, 0);
+    });
+    renderToDOM.topMid.addEventListener("click", () => {
+        handleClick(renderToDOM.topMid, 0, 1);
+    });
+    renderToDOM.topRight.addEventListener("click", () => {
+        handleClick(renderToDOM.topRight, 0, 2);
+    });
+    renderToDOM.centerLeft.addEventListener("click", () => {
+        handleClick(renderToDOM.centerLeft, 1, 0);
+    });
+    renderToDOM.centerMid.addEventListener("click", () => {
+        handleClick(renderToDOM.centerMid, 1, 1);
+    });
+    renderToDOM.centerRight.addEventListener("click", () => {
+        handleClick(renderToDOM.centerRight, 1, 2)
+    });
+    renderToDOM.bottomLeft.addEventListener("click", () => {
+        handleClick(renderToDOM.bottomLeft, 2, 0);
+    });
+    renderToDOM.bottomMid.addEventListener("click", () => {
+        handleClick(renderToDOM.bottomMid, 2, 1);
+    })
+    renderToDOM.bottomRight.addEventListener("click", () => {
+        handleClick(renderToDOM.bottomRight, 2, 1);
+    })
+
+
+    // Running the game until a game over condition is met
+    // let gameOver = false;
+    // while (!gameOver) {
+    //     let isXWinner = winConditions(board.boardArray, playerX.playerToken);
+    //     let isOWinner = winConditions(board.boardArray, playerO.playerToken);
+
+    //     if (board.isFull()) {
+    //         gameOver = true;
+    //         console.log("Cat's game. It's a tie!");
+    //         board.showBoard();
+    //         break
+    //     }
+    //     else if (isXWinner) {
+    //         board.showBoard()
+    //         console.log("X wins!");
+    //         break
+    //     }
+    //     else if (isOWinner) {
+    //         board.showBoard();
+    //         console.log("Y wins!");
+    //         break
+    //     }
+        
+    //     let activePlayer = getActivePlayer(playerX, playerO);
+    //     console.clear();
+    //     board.showBoard();
+
+    //     renderToDOM.drawtoTL(activePlayer.playerToken);
+
+    //     switchPlayer(playerX, playerO);
+    // }
 
 })();
 
