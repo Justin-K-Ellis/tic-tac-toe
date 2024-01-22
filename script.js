@@ -41,7 +41,7 @@ let board = (function() {
         if (boardArray[x][y] === empty) {
             return boardArray[x][y] = token;
         }
-        console.log("You cannot overwrite that position.");
+        renderToDOM.message.textContent = "You cannot overwrite that position.";
     }; 
 
     // Return object
@@ -89,8 +89,8 @@ let runGame = (function() {
     // Private variables and methods
     let playerX = makePlayer("X");
     let playerO = makePlayer("O");
-    let isXWinner = winConditions(board.boardArray, playerX.playerToken);
-    let isOWinner = winConditions(board.boardArray, playerO.playerToken);
+    let isXWinner;
+    let isOWinner;
 
     playerX.isActive = true;
 
@@ -113,6 +113,9 @@ let runGame = (function() {
         const activePlayer = getActivePlayer(playerX, playerO);
         board.setPosition(x, y, activePlayer.playerToken);
         cell.textContent = activePlayer.playerToken;
+        console.table(board.boardArray);
+        isXWinner = winConditions(board.boardArray, playerX.playerToken);
+        isOWinner = winConditions(board.boardArray, playerO.playerToken);
         switchPlayer(playerX, playerO);
 
         if (board.isFull()) {
@@ -152,10 +155,10 @@ let runGame = (function() {
         handleClick(renderToDOM.bottomMid, 2, 1);
     })
     renderToDOM.bottomRight.addEventListener("click", () => {
-        handleClick(renderToDOM.bottomRight, 2, 1);
+        handleClick(renderToDOM.bottomRight, 2, 2);
     })
 
-    return { isXWinner, isOWinner }
+    return { isXWinner, isOWinner, playerO, playerX }  // Make players public for debugging
 
 })();
 
