@@ -77,14 +77,15 @@ let renderToDOM = (function() {
     // All cells
     allCells = document.querySelectorAll(".cell");
 
-    // Message to user
+    // Messages to user
+    let turnDisplay = document.querySelector("#turn-display");
     let message = document.querySelector("#message");
 
     return {
         topLeft, topMid, topRight,
         centerLeft, centerMid, centerRight,
         bottomLeft, bottomMid, bottomRight,
-        message, allCells,
+        message, allCells,turnDisplay,
     }
 })();
 
@@ -107,14 +108,15 @@ let runGame = (function() {
         if (player1.isActive === true) {
             player1.isActive = false;
             player2.isActive = true;
+            renderToDOM.turnDisplay.textContent = `Player ${player2.playerToken}'s turn`;
         }
         else {
             player2.isActive = false;
             player1.isActive = true;
+            renderToDOM.turnDisplay.textContent = `Player ${player1.playerToken}'s turn`; 
         }
     }
 
-    // TODO: make cells unclickable if X or O wins
     // User interaction
     function handleClick(cell, x, y) {
         const activePlayer = getActivePlayer(playerX, playerO);
@@ -126,6 +128,7 @@ let runGame = (function() {
 
         if (board.isFull()) {
             renderToDOM.message.textContent = "Cat's game! It's a tie!";
+            disableAllCells();
         }
         else if (isXWinner) {
             renderToDOM.message.textContent = "X wins!";
