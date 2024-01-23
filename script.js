@@ -45,7 +45,8 @@ let board = (function() {
     }; 
 
     // Return object
-    return { isFull, showBoard, setPosition, boardArray };
+    // TODO: delete showBoard
+    return { isFull, showBoard, setPosition, boardArray }; 
 })();
 
 
@@ -73,13 +74,17 @@ let renderToDOM = (function() {
     let bottomMid = document.querySelector("#bottom-mid");
     let bottomRight = document.querySelector("#bottom-right");
 
+    // All cells
+    allCells = document.querySelectorAll(".cell");
+
+    // Message to user
     let message = document.querySelector("#message");
 
     return {
         topLeft, topMid, topRight,
         centerLeft, centerMid, centerRight,
         bottomLeft, bottomMid, bottomRight,
-        message,
+        message, allCells,
     }
 })();
 
@@ -109,6 +114,8 @@ let runGame = (function() {
         }
     }
 
+    // TODO: make cells unclickable if X or O wins
+    // User interaction
     function handleClick(cell, x, y) {
         const activePlayer = getActivePlayer(playerX, playerO);
         board.setPosition(x, y, activePlayer.playerToken);
@@ -116,17 +123,19 @@ let runGame = (function() {
         console.table(board.boardArray);
         isXWinner = winConditions(board.boardArray, playerX.playerToken);
         isOWinner = winConditions(board.boardArray, playerO.playerToken);
-        switchPlayer(playerX, playerO);
 
         if (board.isFull()) {
             renderToDOM.message.textContent = "Cat's game! It's a tie!";
         }
         else if (isXWinner) {
             renderToDOM.message.textContent = "X wins!";
+            disableAllCells();
         }
         else if (isOWinner) {
             renderToDOM.message.textContent = "O wins!";
+            disableAllCells();
         }
+        switchPlayer(playerX, playerO);
     }
 
     // Attach event listeners to DOM objects
@@ -158,6 +167,14 @@ let runGame = (function() {
         handleClick(renderToDOM.bottomRight, 2, 2);
     })
 
+    // Disable clicking on cells
+    function disableAllCells() {
+        renderToDOM.allCells.forEach(cell => {
+            cell.removeEventListern("click", handleClick);
+        });
+    }
+
+    // TODO: delete this (?)
     return { isXWinner, isOWinner, playerO, playerX }  // Make players public for debugging
 
 })();
