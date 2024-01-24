@@ -17,6 +17,8 @@ let board = (function() {
     const empty = "_";
     const rows = 3;
     const columns = 3;
+
+    // Public properties
     let boardArray = [];
     
     // Generate boardArray content
@@ -32,9 +34,6 @@ let board = (function() {
     const isFull = () => {
         return boardArray.every(row => row.every(space => space !== empty));
     };
-    const showBoard = () => {
-        console.table(boardArray);
-    };
 
 
     const setPosition = (x, y, token) => {
@@ -45,14 +44,13 @@ let board = (function() {
     }; 
 
     // Return object
-    // TODO: delete showBoard
-    return { isFull, showBoard, setPosition, boardArray }; 
+    return { isFull, setPosition, boardArray }; 
 })();
 
 
 // Factory function to make players
 function makePlayer(token) {
-    const playerName = `${token} Player`;
+    const playerName = `Player ${token}`;
     const playerToken = token;
     let isActive = false;
     let numberOfWins = 0;  // Used if multiple rounds are played.
@@ -81,18 +79,21 @@ let renderToDOM = (function() {
     let turnDisplay = document.querySelector("#turn-display");
     let message = document.querySelector("#message");
 
+    // Buttons
+    const restart = document.querySelector("#restart");
+
     return {
         topLeft, topMid, topRight,
         centerLeft, centerMid, centerRight,
         bottomLeft, bottomMid, bottomRight,
-        message, allCells,turnDisplay,
+        message, allCells,turnDisplay, restart,
     }
 })();
 
 
 let runGame = (function() {
 
-    // Private variables and methods
+    // Public variables
     let playerX = makePlayer("X");
     let playerO = makePlayer("O");
     let isXWinner;
@@ -108,12 +109,12 @@ let runGame = (function() {
         if (player1.isActive === true) {
             player1.isActive = false;
             player2.isActive = true;
-            renderToDOM.turnDisplay.textContent = `Player ${player2.playerToken}'s turn`;
+            renderToDOM.turnDisplay.textContent = `${player2.playerName}'s turn`;
         }
         else {
             player2.isActive = false;
             player1.isActive = true;
-            renderToDOM.turnDisplay.textContent = `Player ${player1.playerToken}'s turn`; 
+            renderToDOM.turnDisplay.textContent = `${player1.playerName}'s turn`; 
         }
     }
 
@@ -122,21 +123,17 @@ let runGame = (function() {
         const activePlayer = getActivePlayer(playerX, playerO);
         board.setPosition(x, y, activePlayer.playerToken);
         cell.textContent = activePlayer.playerToken;
-        console.table(board.boardArray);
         isXWinner = winConditions(board.boardArray, playerX.playerToken);
         isOWinner = winConditions(board.boardArray, playerO.playerToken);
 
         if (board.isFull()) {
             renderToDOM.message.textContent = "Cat's game! It's a tie!";
-            disableAllCells();
         }
         else if (isXWinner) {
-            renderToDOM.message.textContent = "X wins!";
-            disableAllCells();
+            renderToDOM.message.textContent = "Player X wins!";
         }
         else if (isOWinner) {
-            renderToDOM.message.textContent = "O wins!";
-            disableAllCells();
+            renderToDOM.message.textContent = "Player O wins!";
         }
         switchPlayer(playerX, playerO);
     }
@@ -165,20 +162,15 @@ let runGame = (function() {
     });
     renderToDOM.bottomMid.addEventListener("click", () => {
         handleClick(renderToDOM.bottomMid, 2, 1);
-    })
+    });
     renderToDOM.bottomRight.addEventListener("click", () => {
         handleClick(renderToDOM.bottomRight, 2, 2);
     })
 
-    // Disable clicking on cells
-    function disableAllCells() {
-        renderToDOM.allCells.forEach(cell => {
-            cell.removeEventListern("click", handleClick);
-        });
-    }
-
-    // TODO: delete this (?)
-    return { isXWinner, isOWinner, playerO, playerX }  // Make players public for debugging
+    // Restart game
+    renderToDOM.restart.addEventListener("click", () => {
+        location.reload();
+    })
 
 })();
 
