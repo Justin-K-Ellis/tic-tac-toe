@@ -20,6 +20,7 @@ let board = (function() {
 
     // Public properties
     let boardArray = [];
+    let overwriteAttempt = false;
     
     // Generate boardArray content
     for (let i = 0; i < rows; i++) {
@@ -38,13 +39,14 @@ let board = (function() {
 
     const setPosition = (x, y, token) => {
         if (boardArray[x][y] === empty) {
+            renderToDOM.message.textContent = "";
             return boardArray[x][y] = token;
         }
-        renderToDOM.message.textContent = "You cannot overwrite that position.";
+        renderToDOM.message.textContent = "You cannot overwrite that position. Skip a turn.";
     }; 
 
     // Return object
-    return { isFull, setPosition, boardArray }; 
+    return { isFull, setPosition, boardArray, overwriteAttempt }; 
 })();
 
 
