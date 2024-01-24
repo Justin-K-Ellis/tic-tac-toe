@@ -126,14 +126,14 @@ let runGame = (function() {
         isXWinner = winConditions(board.boardArray, playerX.playerToken);
         isOWinner = winConditions(board.boardArray, playerO.playerToken);
 
-        if (board.isFull()) {
-            renderToDOM.message.textContent = "Cat's game! It's a tie!";
-        }
-        else if (isXWinner) {
+        if (isXWinner) {
             renderToDOM.message.textContent = "Player X wins!";
         }
         else if (isOWinner) {
             renderToDOM.message.textContent = "Player O wins!";
+        }
+        else if (board.isFull()) {
+            renderToDOM.message.textContent = "Cat's game! It's a tie!";
         }
         switchPlayer(playerX, playerO);
     }
