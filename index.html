@@ -4,26 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <title>Tic-Tac-Toe</title>
 </head>
 <body>
-    <h1>Tic-Tac-Toe</h1>
-
-    <div class="container">
-        <div class="row">
-            <div class="cell" id="top-left"></div>
-            <div class="cell" id="top-mid"></div>
-            <div class="cell" id="top-right"></div>
-        </div>
-        <div class="row">
-            <div class="cell" id="center-left"></div>
-            <div class="cell" id="center-mid"></div>
-            <div class="cell" id="center-right"></div>
-        </div>
-        <div class="row">
-            <div class="cell" id="bottom-left"></div>
-            <div class="cell" id="bottom-mid"></div>
-            <div class="cell" id="bottom-right"></div>
+    <div class="outer-wrapper">
+        <div class="inner-wrapper">
+            <h1>Tic-Tac-Toe</h1>
+            <p id="turn-display">Player X's turn</p>
+            <div class="container">
+                <div class="row">
+                    <div class="cell" id="top-left">
+                    </div>
+                    <div class="cell" id="top-mid"></div>
+                    <div class="cell" id="top-right"></div>
+                </div>
+                <div class="row">
+                    <div class="cell" id="center-left"></div>
+                    <div class="cell" id="center-mid"></div>
+                    <div class="cell" id="center-right"></div>
+                </div>
+                <div class="row">
+                    <div class="cell" id="bottom-left"></div>
+                    <div class="cell" id="bottom-mid"></div>
+                    <div class="cell" id="bottom-right"></div>
+                </div>
+            </div>
+            <p id="message"></p>
+            <button id="restart">Restart</button>
         </div>
     </div>
 
