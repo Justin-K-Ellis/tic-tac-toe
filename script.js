@@ -122,7 +122,6 @@ let runGame = (function() {
     function handleClick(cell, x, y) {
         const activePlayer = getActivePlayer(playerX, playerO);
         board.setPosition(x, y, activePlayer.playerToken);
-        // cell.textContent = activePlayer.playerToken;
         cell.textContent = board.boardArray[x][y];
         isXWinner = winConditions(board.boardArray, playerX.playerToken);
         isOWinner = winConditions(board.boardArray, playerO.playerToken);
