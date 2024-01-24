@@ -4,7 +4,7 @@
 }
 
 h1 {
-    font-size: 2rem;
+    font-size: 2.5rem;
 }
 
 .outer-wrapper {
@@ -23,22 +23,22 @@ h1 {
 .container {
     width: 300px;
     height: 300px;
-    border: 1px solid black;
     display: flex;
     flex-direction: column;
 }
 
 .row {
-    /* border: 1px solid black; */
     display: flex;
     flex-direction: row;
     flex-basis: 100px;
 }
 
 .cell {
+    font-size: 2rem;
     border: 1px solid black;
-    flex-grow: 1;
-    text-align: center;
-    padding-top: 42px;
-    padding-bottom: 42px;
+    height: 100px;
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
