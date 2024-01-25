@@ -20,7 +20,6 @@ let board = (function() {
 
     // Public properties
     let boardArray = [];
-    let overwriteAttempt = false;
     
     // Generate boardArray content
     for (let i = 0; i < rows; i++) {
@@ -46,7 +45,7 @@ let board = (function() {
     }; 
 
     // Return object
-    return { isFull, setPosition, boardArray, overwriteAttempt }; 
+    return { isFull, setPosition, boardArray }; 
 })();
 
 
@@ -74,9 +73,6 @@ let renderToDOM = (function() {
     let bottomMid = document.querySelector("#bottom-mid");
     let bottomRight = document.querySelector("#bottom-right");
 
-    // All cells
-    allCells = document.querySelectorAll(".cell");
-
     // Messages to user
     let turnDisplay = document.querySelector("#turn-display");
     let message = document.querySelector("#message");
@@ -88,7 +84,7 @@ let renderToDOM = (function() {
         topLeft, topMid, topRight,
         centerLeft, centerMid, centerRight,
         bottomLeft, bottomMid, bottomRight,
-        message, allCells,turnDisplay, restart,
+        message, turnDisplay, restart,
     }
 })();
 
